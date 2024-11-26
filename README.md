@@ -59,9 +59,10 @@ The application provides three main HTTP endpoints to interact with the data:
 3. **Set environment variables:**
    - Create a `.env` file:
      ```env
-     NEO4J_URI=bolt://localhost:7687
-     NEO4J_USERNAME=neo4j
+     NEO4J_DB=bolt://localhost:7687
+     NEO4J_USER=neo4j
      NEO4J_PASSWORD=yourpassword
+     SERVER_PORT=8080
      ```
 
 4. **Build and run the application:**
