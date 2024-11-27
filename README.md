@@ -97,6 +97,16 @@ The application provides three main HTTP endpoints to interact with the data:
 
 ---
 
+## Database Graph Visualization
+
+Below is an example of the graph representation of the data stored in Neo4j:
+
+![Graph Example](./images/graph_example.png)
+
+This image demonstrates the relationships between architectures (e.g., `arm`) and their associated shellcodes. The connections labeled `HAS_CHILD` indicate the hierarchical organization of the shellcodes under a specific architecture.
+
+---
+
 ## How It Works (Behind the Scenes)
 
 1. The application initializes a connection to Neo4j and sets up a RESTful HTTP server using the Go `net/http` package and a router (like `gorilla/mux`).
