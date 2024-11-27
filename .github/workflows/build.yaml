@@ -1,0 +1,36 @@
+name: Build Binaries
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+        go-version: ['1.22.4']
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Set up Go
+      uses: actions/setup-go@v2
+      with:
+        go-version: ${{ matrix.go-version }}
+
+    - name: Build
+      run: |
+        go build -o bin/shellcode-db-${{ matrix.os }}-${{ matrix.go-version }} ./cmd/
+
+    - name: Archive production artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: shellcode-db-binaries-${{ matrix.os }}-${{ matrix.go-version }}
+        path: bin/
