@@ -18,4 +18,4 @@ RUN apk --no-cache add ca-certificates
 
 COPY --from=builder /app/shellcode-db /usr/local/bin/shellcode-db
 
-CMD ["/usr/local/bin/k-alert-module"]
+CMD ["/usr/local/bin/shellcode-db"]
