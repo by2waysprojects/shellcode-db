@@ -13,7 +13,7 @@ func SetupRoutes(
 
 	router.HandleFunc("/architectures", shellCodeController.GetAllArchitectures).Methods("GET")
 	router.HandleFunc("/architectures/{id}/shellcodes", shellCodeController.GetShellcodesByArchitectureID).Methods("GET")
-	router.HandleFunc("/load-data", shellCodeController.LoadData).Methods("POST")
+	router.HandleFunc("/load-data", shellCodeController.LoadData).Methods("GET")
 
 	return router
 }
