@@ -7,16 +7,9 @@ import (
 	"shellcode-db/controllers"
 	"shellcode-db/routes"
 	"shellcode-db/services"
-
-	"github.com/joho/godotenv"
 )
 
 func main() {
-	err := godotenv.Load()
-	if err != nil {
-		log.Fatalf("error loading file .env: %v", err)
-	}
-
 	port := os.Getenv("SERVER_PORT")
 	databaseURL := os.Getenv("NEO4J_DB")
 	user := os.Getenv("NEO4J_USER")
