@@ -1,36 +1,44 @@
-name: Build Binaries
+name: Build and deploy
 
 on:
   push:
-    branches:
-      - main
-  pull_request:
-    branches:
-      - main
+    branches: [ "main" ]
+  workflow_dispatch:
 
 jobs:
-  build:
-    runs-on: ${{ matrix.os }}
-    strategy:
-      matrix:
-        os: [ubuntu-latest, windows-latest, macos-latest]
-        go-version: ['1.22.4']
 
+  build-and-push-image:
+    runs-on: ubuntu-latest
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v2
+    - uses: actions/checkout@v4
 
     - name: Set up Go
-      uses: actions/setup-go@v2
+      uses: actions/setup-go@v4
       with:
-        go-version: ${{ matrix.go-version }}
+        go-version: '1.22.4'
+
+    - name: Install dependencies
+      run: go mod download
 
     - name: Build
-      run: |
-        go build -o bin/shellcode-db-${{ matrix.os }}-${{ matrix.go-version }} ./cmd/
-
-    - name: Archive production artifacts
-      uses: actions/upload-artifact@v4
+      run: go build -v -o shellcode-db ./cmd/
+  
+    - name: Login to Docker Hub
+      uses: docker/login-action@v3
       with:
-        name: shellcode-db-binaries-${{ matrix.os }}-${{ matrix.go-version }}
-        path: bin/
+        username: ${{ secrets.DOCKERHUB_USERNAME }}
+        password: ${{ secrets.DOCKERHUB_TOKEN }}
+        
+    - name: Set up QEMU
+      uses: docker/setup-qemu-action@v3
+      
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v3
+      
+    - name: Build and push
+      uses: docker/build-push-action@v6
+      with:
+        context: .
+        push: true
+        platforms: linux/amd64,linux/arm64/v8
+        tags: andres2000gb/shellcode-db:latest
